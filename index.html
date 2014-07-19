@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="i69">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+    <style type="text/css">
+    	.header-placeholder {
+			height: 80px;
+		}
+    </style>
+  	<title>i Like 69</title>
+  </head>
+  <body>
+	<header class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+          <a role="button" class="navbar-brand">i Live 69</a>
+            <li><a href="https://docs.google.com/forms/d/1DZUl3yIpCLu-xCDL0mo8lylWRQKAnTACQVNAB2wa9z4/viewform" target="_blank" >提供薪資</a></li>
+            <li class="active"><a href="#">查詢薪資</a></li>
+          </ul>
+        </div>
+      </div>
+	</header>
+	<div class="header-placeholder"></div>
+
+    <div class="container marketing" ng-controller="QueryController">
+      <div class="row">
+        批判那些付不薪資的企業, 何不拒絕跟媒體/政府起舞？ 我們來鼓勵那些懂得尊重專業的企業.
+      </div>
+      
+      <hr class="featurette-divider">
+
+      <div class="row">
+        <div class="col-lg-4">
+          <img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" style="width: 140px; height: 140px;">
+          <h2>薪資普查</h2>
+        </div>
+        <div class="col-lg-4">
+          <img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" style="width: 140px; height: 140px;">
+          <h2>開放資料</h2>
+        </div>
+        <div class="col-lg-4">
+          <img class="img-circle" src="./logo.jpg" alt="Generic placeholder image" style="width: 140px; height: 140px;">
+          <h2>依市場規定</h2>
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="row">
+      	<table class="table table-striped">
+		  <thead>
+		  	<tr>
+			  	<th>公司</th>
+			  	<th>職務</th>
+			  	<th>年次</th>
+			  	<th>薪資</th>
+		  	</tr>
+		  </thead>
+		  <tbody>
+		  	<tr ng-repeat="table in tables">
+			  	<td ng-bind="table.company"></td>
+			  	<td ng-bind="table.title"></td>
+			  	<td>{{table.birth | year}}</td>
+			  	<td>{{table.pay || 0}}起</td>
+		  	</tr>
+		  </tbody>
+		</table>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <footer>
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>Coding By YuTin 2014.</p>
+      </footer>
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="./bower_components/angular/angular.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="./bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+    <script type="text/javascript">
+    	var i69 = angular.module('i69', ['ui.bootstrap']);
+    	var column = {
+	    	'gsx$公司名稱': 'company',
+			'gsx$出生年': 'birth',
+			'gsx$工作內容': 'work',
+			'gsx$特休天數年': 'holiday',
+			'gsx$職務職稱': 'title',
+			'gsx$薪資': 'pay'
+		};
+		var column_key = Object.keys(column);
+		i69.filter('year', function() {
+		  return function(item) {
+		      return item.substring(0,4);
+		  };
+		});
+		i69.controller('QueryController', ['$scope', '$http', function($scope, $http) {
+			$scope.tables = [];
+			$http.get('https://spreadsheets.google.com/feeds/list/1LwUoYeu0C0KZJAxllaqSItehmQSfD3QFtpAQI1GKUBI/1/public/values?v=3.0&alt=json')
+			.success(function(data, status, headers, config) {
+			  	var entry = data.feed.entry;
+			  	for (var i = entry.length - 1; i >= 0; i--) {
+			  		var row = {};
+			  		for (var y = column_key.length - 1; y >= 0; y--) {
+			  			row[column[column_key[y]]] = entry[i][column_key[y]]['$t'];
+			  		}
+			  		$scope.tables.push(row);
+			  	};
+			});
+		}]);
+    </script>
+  </body>
+</html>

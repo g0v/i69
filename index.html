@@ -59,7 +59,7 @@
 		  	<tr>
 			  	<th>公司</th>
 			  	<th>職務</th>
-			  	<th>年次</th>
+			  	<th>年資</th>
 			  	<th>薪資</th>
 		  	</tr>
 		  </thead>
@@ -67,7 +67,7 @@
 		  	<tr ng-repeat="table in tables">
 			  	<td ng-bind="table.company"></td>
 			  	<td ng-bind="table.title"></td>
-			  	<td>{{table.birth | year}}</td>
+			  	<td>{{table.year | year}}</td>
 			  	<td>{{table.pay || 0}}起</td>
 		  	</tr>
 		  </tbody>
@@ -95,7 +95,7 @@
     	var i69 = angular.module('i69', ['ui.bootstrap']);
     	var column = {
 	    	'gsx$公司名稱': 'company',
-			'gsx$出生年': 'birth',
+			'gsx$年資': 'year',
 			'gsx$工作內容': 'work',
 			'gsx$特休天數年': 'holiday',
 			'gsx$職務職稱': 'title',
